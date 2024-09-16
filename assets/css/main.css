@@ -1093,13 +1093,13 @@ a.sidebar-title:focus {
 
 .widget .widget-image,
 .widget .widget-icon {
-    width: 64px;
-    height: 64px;
+    width: 50px;
+    height: 50px;
 }
 
 .widget .widget-icon {
     display: inline-block;
-    line-height: 64px;
+    line-height: 50px;
     text-align: center;
     font-size: 28px;
     color: #ffffff;
@@ -1149,7 +1149,7 @@ a.sidebar-title:focus {
 
 .widget-simple .widget-image,
 .widget-simple .widget-icon {
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
 .widget-simple .widget-image.pull-left,
@@ -4216,15 +4216,27 @@ table.dataTable thead>tr>th {
 table tbody>tr>td h4 {
     font-weight: bold;
 }
-
+.stats-row .widget-simple{
+	padding: 15px 15px 5px 15px;
+}
 .stats-row .widget-simple .widget-content {
-    font-size: 22px !important;
+    font-size: 20px !important;
 }
 
 .stats-row .widget-simple .widget-content small {
     font-size: 16px !important;
 }
-
+.widget-footer{
+	padding:0px 0px 15px 0px;
+}
+.widget-footer h3{
+	margin:0px;
+}
+.stats-row .widget-footer small {
+    display: block;
+    margin-top: 7px;
+    font-weight: 400;
+}
 .text-bold {
     font-weight: bold;
 }
@@ -4247,4 +4259,7 @@ table tbody>tr>td h4 {
 
 .w-100 {
     width: 100%;
+}
+.p-0{
+	padding:0px ;
 }

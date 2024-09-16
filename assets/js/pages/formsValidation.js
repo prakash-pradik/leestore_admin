@@ -232,6 +232,48 @@ var FormsValidation = function () {
 					amount_mode: 'Please select a mode of payment!',
                 }
             });
+			
+			$('#sale-exp-validation').validate({
+                errorClass: 'help-block animation-slideDown', // You can change the animation class for a different entrance animation - check animations page
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    e.parents('.form-group > div').append(error);
+                },
+                highlight: function (e) {
+                    $(e).closest('.form-group').removeClass('has-success has-error').addClass('has-error');
+                    $(e).closest('.help-block').remove();
+                },
+                success: function (e) {
+                    // You can use the following if you would like to highlight with green color the input after successful validation!
+                    e.closest('.form-group').removeClass('has-success has-error'); // e.closest('.form-group').removeClass('has-success has-error').addClass('has-success');
+                    e.closest('.help-block').remove();
+                },
+                rules: {
+                    emp_id: {
+                        required: true
+                    },
+                    sale_desc: {
+                        required: true,
+                        minlength: 3
+                    },
+                    sale_amt: {
+                        required: true,
+                        digits: true
+                    },
+					amount_mode: {
+                        required: true
+                    }
+                },
+                messages: {
+                    emp_id: 'Please select a sales person!',
+                    sale_desc: {
+                        required: 'Please enter a description',
+                        minlength: 'Description must consist of at least 3 characters'
+                    },
+                    sale_amt: 'Please enter only digits!',
+					amount_mode: 'Please select a mode of payment!',
+                }
+            });
             // Initialize Masked Inputs
             // a - Represents an alpha character (A-Z,a-z)
             // 9 - Represents a numeric character (0-9)

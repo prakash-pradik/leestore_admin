@@ -75,10 +75,13 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
+	'hostname' => 'rds-leeadmin.c54uqy6k8zqs.us-east-1.rds.amazonaws.com',
+	'username' => 'admin',
+	'password' => 'sVDR(w8Q7LaP2',
+	'database' => 'leeadmin',
+	/* 'username' => 'root',
 	'password' => '',
-	'database' => 'leestore',
+	'database' => 'leestore', */
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

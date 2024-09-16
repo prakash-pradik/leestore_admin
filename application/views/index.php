@@ -18,8 +18,7 @@
 		</div>
 		<!-- END Dashboard Header -->
 		
-		<!-- Widgets Row -->
-			
+		<!-- Widgets Row -->			
 		<div class="row">
 			<?php if(!empty($session_user) && $session_user['admin_type'] === 'super_admin') { ?>
 			<div class="col-md-6">
@@ -44,16 +43,16 @@
 							<tbody>
 								<?php if(!empty($employees)) {
 									$i = 1; 
-									foreach($employees as $user){
+									foreach($employees as $emp){
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i; ?></td>
-									<td><?php echo $user['name']; ?></td>
-									<td><?php echo $user['phone_number']; ?></td>
+									<td><a class="text-info" href="<?php echo base_url('employee_details/'.$emp['id']); ?>"><?php echo $emp['name']; ?></a></td>
+									<td><?php echo $emp['phone_number']; ?></td>
 									<td class="text-center">
 										<div class="btn-group">
-											<a href="#modal-emp-update" data-toggle="modal" title="Update" data-placement="top" class="btn btn-default enable-tooltip" data-user_id="<?php echo $user['id']; ?>" data-name="<?php echo $user['name']; ?>" data-phone="<?php echo $user['phone_number']; ?>" onclick="fetchEmpDetails(this)"><i class="fa fa-pencil"></i></a>
-											<a href="javascript:void(0)" data-user_id="<?php echo $user['id']; ?>" onclick="deleteEmpData(this);" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
+											<a href="#modal-emp-update" data-toggle="modal" title="Update" data-placement="top" class="btn btn-default enable-tooltip" data-user_id="<?php echo $emp['id']; ?>" data-name="<?php echo $emp['name']; ?>" data-phone="<?php echo $emp['phone_number']; ?>" onclick="fetchEmpDetails(this)"><i class="fa fa-pencil"></i></a>
+											<a href="javascript:void(0)" data-user_id="<?php echo $emp['id']; ?>" onclick="deleteEmpData(this);" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
 										</div>
 									</td>
 								</tr>
@@ -93,7 +92,7 @@
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i; ?></td>
-									<td><?php echo $user['name']; ?></td>
+									<td><a class="text-info" href="<?php echo base_url('user_details/'.$user['id']); ?>"><?php echo $user['name']; ?></a></td>
 									<td><?php echo $user['phone_number']; ?></td>
 									<td class="text-center">
 										<div class="btn-group">

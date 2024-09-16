@@ -26,6 +26,8 @@ class Admin extends CI_Controller {
 		$data['session_user'] = $this->session->userdata('user_loggedin');
 		$data['users'] = $this->admin_model->get_all_users('users');
 		$data['employees'] = $this->admin_model->get_all_users('employees');
+		$data['today_stats'] = $this->admin_model->get_sales_stats();
+		$data['gpay_stats'] = $this->admin_model->get_gpay_stats();
 		$this->load->view('config/template_start');
 		$this->load->view('config/page_head',$data);
 		$this->load->view('index', $data);
@@ -76,7 +78,7 @@ class Admin extends CI_Controller {
 
 		$insert = $this->admin_model->insert_row('incomes', $data);
 		if($insert){
-			redirect('incomes');
+			redirect(base_url('incomes'));
 		}
 	}
 
@@ -122,7 +124,7 @@ class Admin extends CI_Controller {
 
 		$insert = $this->admin_model->insert_row('outcomes', $data);
 		if($insert){
-			redirect('outcomes');
+			redirect(base_url('outcomes'));
 		}
 	}
 
@@ -156,10 +158,25 @@ class Admin extends CI_Controller {
 
 		if($tbl_name == 'users' || $tbl_name == 'employees')
 			$where = array('id' => $user_id );
+		else if($tbl_name == 'employee_advance')
+			$where = array('emp_id' => $user_id );
 		else
 			$where = array('user_id' => $user_id );
 
 		if($user_id){
+			$update = $this->admin_model->update_row_data($tbl_name, $where, array('status' => 2 ));
+		}
+
+	}
+
+	public function delete_adv_row(){
+		
+		$id = $this->input->post('id');
+		$tbl_name = $this->input->post('tbl_name');
+
+		$where = array('id' => $id );
+
+		if($id){
 			$update = $this->admin_model->update_row_data($tbl_name, $where, array('status' => 2 ));
 		}
 
@@ -201,7 +218,7 @@ class Admin extends CI_Controller {
 	{
 		$data['session_user'] = $this->session->userdata('user_loggedin');
 		$data['employees'] = $this->admin_model->get_all_users('employees');
-		$data['daily_sales'] = $this->admin_model->get_all_sales('today');
+		$data['daily_sales'] = $this->admin_model->get_all_sales('today', 'desc');
 		$data['today_stats'] = $this->admin_model->get_sales_stats();
 		$data['gpay_stats'] = $this->admin_model->get_gpay_stats();
 		$this->load->view('config/template_start');
@@ -224,7 +241,7 @@ class Admin extends CI_Controller {
 		
 		$insert = $this->admin_model->insert_row('daily_sales', $data);
 		if($insert){
-			redirect('daily_sales');
+			redirect(base_url('daily_sales'));
 		}
 	}
 	
@@ -240,7 +257,7 @@ class Admin extends CI_Controller {
 		
 		$insert = $this->admin_model->insert_row('daily_sales', $data);
 		if($insert){
-			redirect('daily_sales');
+			redirect(base_url('daily_sales'));
 		}
 	}
 
@@ -260,7 +277,7 @@ class Admin extends CI_Controller {
 	public function full_report()
 	{
 		$data['session_user'] = $this->session->userdata('user_loggedin');
-		$data['daily_sales'] = $this->admin_model->get_all_sales('all');
+		$data['daily_sales'] = $this->admin_model->get_all_sales('all', 'desc');
 		$this->load->view('config/template_start');
 		$this->load->view('config/page_head',$data);
 		$this->load->view('full_report', $data);
@@ -274,30 +291,135 @@ class Admin extends CI_Controller {
 		if($type == 'today'){
 			$file_name = 'DailySalesReport.pdf';
 			$data['day_type'] = 'Daily';
+			$orderBy = 'asc';
 		}
 		else{
 			$file_name = 'OverallSalesReport.pdf';
 			$data['day_type'] = 'Overall';
+			$orderBy = 'desc';
 		}
 
 		$data['base_url'] = base_url();
-		$data['daily_sales'] = $this->admin_model->get_all_sales($type);
+		$data['daily_sales'] = $this->admin_model->get_all_sales($type, $orderBy);
+		$data['today_stats'] = $this->admin_model->get_sales_stats();
+		$data['gpay_stats'] = $this->admin_model->get_gpay_stats();
         $html = $this->load->view('sales_pdf',$data,true);
         $mpdf = new \Mpdf\Mpdf([
             'format'=>'A4',
-            'margin_top'=>5,
+            'margin_top'=>10,
             'margin_right'=>5,
             'margin_left'=>5,
             'margin_bottom'=>5,
         ]);
         $mpdf->WriteHTML($html);
+		//$mpdf->Output();
 		$mpdf->Output($file_name, 'D'); 
     }
 	public function print_test()
     {
 		$data['base_url'] = base_url();
-		$data['daily_sales'] = $this->admin_model->get_all_sales('all');
+		$data['day_type'] = 'Today';
+		$data['daily_sales'] = $this->admin_model->get_all_sales('all', 'asc');
+		$data['today_stats'] = $this->admin_model->get_sales_stats();
+		$data['gpay_stats'] = $this->admin_model->get_gpay_stats();
         $this->load->view('sales_pdf',$data);
-    
     }
+	
+	public function employee_advance()
+	{
+		$data['session_user'] = $this->session->userdata('user_loggedin');
+		$data['users'] = $this->admin_model->get_all_users('employees');
+		$data['incomes'] = $this->admin_model->get_all_advances();
+		$this->load->view('config/template_start');
+		$this->load->view('config/page_head',$data);
+		$this->load->view('emp_advance', $data);
+		$this->load->view('config/page_footer');
+		$this->load->view('config/template_scripts');
+		$this->load->view('config/template_end');
+	}
+
+	public function insert_advance_data(){
+		
+		$type = $this->input->post('insert_type');
+		$user_id = $this->input->post('old_user_id');
+
+		if($type == 'new'){
+			$data = array(
+				'emp_id' => $user_id,
+				'amount' => $this->input->post('income_amt_value'),
+				'amount_type' => 'DEB',
+				'date_added' => date("Y-m-d H:i:s")
+			);
+			$insert = $this->admin_model->insert_row('employee_advance', $data);
+
+		} else if($type == 'old') {
+			$user_id = $this->input->post('old_user_id');
+			$data = array(
+				'emp_id' => $user_id,
+				'amount' => $this->input->post('old_income_amt'),
+				'amount_type' => 'CRE',
+				'date_added' => date("Y-m-d H:i:s")
+			);
+			$insert = $this->admin_model->insert_row('employee_advance', $data);
+		} else {
+			$data = array(
+				'amount' => $this->input->post('edit_amt'),
+				'date_modified' => date("Y-m-d H:i:s")
+			);
+			$where = array('id' => $this->input->post('edit_id') );
+			$insert = $this->admin_model->update_row_data('employee_advance', $where, $data);
+		}
+
+		
+		if($insert){
+			redirect(base_url('employee_advance'));
+		}
+	}
+
+	public function employee_details($id)
+	{
+		if(!empty($id)){
+			$data['session_user'] = $this->session->userdata('user_loggedin');
+			$data['employee'] = $this->admin_model->get_by_id($id, 'employees');
+			if(!empty($data['employee'])){
+				$data['emp_advance'] = $this->admin_model->get_emp_advances($id);
+				$data['adv_stats'] = $this->admin_model->emp_adv_stats($id);
+				$data['emp_sales'] = $this->admin_model->get_emp_sales($id);
+				
+				$this->load->view('config/template_start');
+				$this->load->view('config/page_head',$data);
+				$this->load->view('emp_details', $data);
+				$this->load->view('config/page_footer');
+				$this->load->view('config/template_scripts');
+				$this->load->view('config/template_end');
+			} else {
+				redirect(base_url('employee_advance'));
+			}
+		} else {
+			redirect(base_url('employee_advance'));
+		}
+	}
+
+	public function user_details($id)
+	{
+		if(!empty($id)){
+			$data['session_user'] = $this->session->userdata('user_loggedin');
+			$data['user'] = $this->admin_model->get_by_id($id, 'users');
+			if(!empty($data['user'])){
+				$data['emp_advance'] = $this->admin_model->get_user_advances($id);
+				$data['user_stats'] = $this->admin_model->user_income_stats($id);
+				
+				$this->load->view('config/template_start');
+				$this->load->view('config/page_head',$data);
+				$this->load->view('user_details', $data);
+				$this->load->view('config/page_footer');
+				$this->load->view('config/template_scripts');
+				$this->load->view('config/template_end');
+			} else {
+				redirect(base_url('dashboard'));
+			}
+		} else {
+			redirect(base_url('dashboard'));
+		}
+	}
 }

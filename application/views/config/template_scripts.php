@@ -19,7 +19,7 @@
                 let hours = checkTime(today.getHours());
                 let minutes = checkTime(today.getMinutes());
                 let seconds = checkTime(today.getSeconds());
-                let ampm = hours >= 12 ? 'pm' : 'am';
+                let ampm = hours >= 12 ? 'PM' : 'AM';
 
                 let day     = checkTime(today.getUTCDate());
                 let month   = checkTime(today.getUTCMonth() + 1); // months from 1-12

@@ -235,9 +235,8 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <form action="<?php echo base_url('admin/insert_sales'); ?>" id="income-validation-old" method="post" class="form-horizontal form-bordered">
+                <form action="<?php echo base_url('admin/insert_sales'); ?>" id="sale-exp-validation" method="post" class="form-horizontal form-bordered">
 					<input type="hidden" id="sale_type" name="sale_type" class="form-control" value="exp">
-					<input type="hidden" id="amount_mode" name="amount_mode" class="form-control" value="cash">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Name</label>
                         <div class="col-md-8">
@@ -268,6 +267,16 @@
                                 <input type="text" id="sale_amt" name="sale_amt" class="form-control" placeholder="Enter Amount" require="true">
                                 <span class="input-group-addon"><i class="fa fa-inr"></i></span>
                             </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-4 control-label">Amount Mode</label>
+                        <div class="col-md-8">
+                            <select id="amount_mode" name="amount_mode" class="form-control" size="1" require="true">
+								<option value="">Please select</option>
+								<option value="cash">Cash</option>
+								<option value="gpay">Gpay</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group form-actions">

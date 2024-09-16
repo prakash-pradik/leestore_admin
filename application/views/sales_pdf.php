@@ -49,7 +49,7 @@
     </style>
 </head>
 
-<body>
+<body >
     <div class="container">
         <div class="card" style="padding-top:1rem;">
             <div class="card-body">
@@ -60,9 +60,10 @@
                                 <tr>
                                     <td>
                                         <a href="javascript:;">
-                                            <img src="<?php echo $base_url; ?>/assets/img/lee_store.png" width="100" alt="">
+                                            <img src="<?php echo $base_url; ?>./assets/img/lee_store.png" width="100" alt="">
                                         </a>
                                     </td>
+									
                                     <td class="text-right">
                                         <div>J.A Complex, R.C Church (Opp),</div>
                                         <div>Ayyanarpuram 1st Street,</div>
@@ -73,15 +74,15 @@
                                 </tr>
                             </table>
                         </header>
-                        <h3 class="text-center" style="padding-bottom:10px"><?php echo $day_type; ?> Sales Report</h3>
+                        <h3 class="text-center" style="padding-bottom:10px"><?php echo $day_type; ?> Sales Report <?php if($day_type == 'Today') { echo '('.date("d-M-Y").')'; } ?></h3>
                         <div class="invoice">
                             <table>
                                 <thead>
                                     <tr>
                                         <th class="text-center">Sl.No</th>
                                         <th>Details</th>
-                                        <th class="text-right">Debit Amt(₹)</th>
-                                        <th class="text-right">Credit Amt(₹)</th>
+                                        <th class="text-right">Debit Amt (₹)</th>
+                                        <th class="text-right">Credit Amt (₹)</th>
                                         <th>Sales Person</th>
                                         <th>Date</th>
                                     </tr>
@@ -93,9 +94,9 @@
                                     ?>
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
-                                        <td class=""><?php echo $sale['description']; ?></td>
-                                        <td class="text-danger text-right"><h4><?php if($sale['amount_type'] == 'exp') echo $sale['amount'].' ₹'; ?></h4></td>
-                                        <td class="text-success text-right"><h4><?php if($sale['amount_type'] == 'inc') echo $sale['amount'].' ₹'; ?></h4></td>
+                                        <td class="" style="text-transform:capitalize;"><?php echo $sale['description']; ?></td>
+                                        <td class="text-right"><h4 class="text-danger"><?php if($sale['amount_type'] == 'exp') echo $sale['amount'].' ₹'; ?></h4></td>
+                                        <td class="text-right"><h4 class="text-success"><?php if($sale['amount_type'] == 'inc') echo $sale['amount'].' ₹'; ?></h4></td>
                                         <td class=""><?php echo $sale['name']; ?></td>
                                         <td class="">
                                             <?php echo date('d-m-Y h:i a', strtotime($sale['date_added'])); ?>
@@ -108,7 +109,30 @@
                                     
                                 </tbody>
                             </table>
-                        <div>
+							<br/>
+							<table>
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Total Income (₹)</th>
+                                        <th class="text-center">Total Expenses (₹)</th>
+                                        <th class="text-center">Cash Available (₹)</th>
+										<th class="text-center">Gpay Income (₹)</th>
+                                        <th class="text-center">Gpay Expenses (₹)</th>
+                                        <th class="text-center">Gpay Available (₹)</th>
+                                    </tr>
+                                </thead>
+								<tbody>
+									<tr>
+										<td class="text-center"><h3><?php if(!empty($today_stats)) { if(!empty($today_stats->today_income)) echo $today_stats->today_income; else echo '0'; } ?></h3></td>
+										<td class="text-center"><h3><?php if(!empty($today_stats)) { if(!empty($today_stats->today_expense)) echo $today_stats->today_expense; else echo '0'; } ?></h3></td>
+										<td class="text-center"><h3><?php if(!empty($today_stats)) { if(!empty($today_stats->today_available)) echo $today_stats->today_available; else echo '0'; } ?></h3></td>
+										<td class="text-center"><h3><?php if(!empty($gpay_stats)) { if(!empty($gpay_stats->gpay_income)) echo $gpay_stats->gpay_income; else echo '0'; } ?></h3></td>
+										<td class="text-center"><h3><?php if(!empty($gpay_stats)) { if(!empty($gpay_stats->gpay_expense)) echo $gpay_stats->gpay_expense; else echo '0'; } ?></h3></td>
+										<td class="text-center"><h3><?php if(!empty($gpay_stats)) { if(!empty($gpay_stats->gpay_available)) echo $gpay_stats->gpay_available; else echo '0'; } ?></h3></td>
+									</tr>
+								</tbody>
+							</table>
+                        </div>
                         <div style="padding: 10px 0;"> Receipt Created at <?php echo date('d-M-Y h:i a'); ?></div>
                         <footer>Receipt was created on a computer and is valid without the signature and seal.</footer>
                     </div>

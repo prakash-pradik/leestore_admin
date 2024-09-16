@@ -62,5 +62,9 @@ $route['incomes'] = 'admin/incomes';
 $route['outcomes'] = 'admin/outcomes';
 $route['daily_sales'] = 'admin/daily_sales';
 $route['full_report'] = 'admin/full_report';
+$route['employee_advance'] = 'admin/employee_advance';
+$route['employee_details/(:any)'] = 'admin/employee_details/$1';
+$route['user_details/(:any)'] = 'admin/user_details/$1';
+
 $route['user_profile'] = 'admin/user_profile';
 

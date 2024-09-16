@@ -54,6 +54,11 @@
                                     <a href="<?php echo base_url('full_report'); ?>" class="<?php if($this->uri->segment(1) == 'full_report') echo 'active'; ?>"><i class="gi gi-table sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide"> Full Report</span></a>
                                 </li>
                                 <?php if(!empty($session_user) && $session_user['admin_type'] === 'super_admin') { ?>
+								
+								<li>
+                                    <a href="<?php echo base_url('employee_advance'); ?>" class="<?php if($this->uri->segment(1) == 'employee_advance') echo 'active'; ?>"><i class="hi hi-user sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide"> Employee Advance</span></a>
+                                </li>
+								
 								<li>
                                     <a href="<?php echo base_url('incomes'); ?>" class="<?php if($this->uri->segment(1) == 'incomes') echo 'active'; ?>"><i class="hi hi-arrow-down sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide"> Incomes</span></a>
                                 </li>
